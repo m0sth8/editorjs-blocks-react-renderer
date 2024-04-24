@@ -14,9 +14,10 @@ export type ConfigProp = Record<string, RenderConfig>;
 
 export type RenderConfig = Record<string, any>;
 
-export type RenderFn<T = undefined, K = Record<string, any> | undefined> = (
+export type RenderFn<T = undefined, K = Record<string, any> | undefined, T2 = BlockTunes> = (
   _: {
     data: T;
+    tunes?: T2;
     className?: string;
   } & K,
 ) => JSX.Element;
@@ -33,12 +34,19 @@ export interface Block {
   id?: string;
   type: string;
   data: Record<string, any>;
+  tunes?: Record<string, any>;
 }
 
 export interface DataProp {
   time: number;
   version: string;
   blocks: Block[];
+}
+
+export interface BlockTunes {
+  alignment?: {
+    alignment: 'left' | 'center' | 'right';
+  };
 }
 
 const Blocks = ({
@@ -68,15 +76,13 @@ const Blocks = ({
     ...renderers,
   };
 
-  const hasBlockId = data.version?.includes('2.21');
-
   return (
     <>
       {data.blocks.map((block, i) => {
         if (block.type.toString() in availableRenderers) {
           // @ts-ignore Todo: find a fix
           const Tag = availableRenderers[block.type];
-          return <Tag key={hasBlockId && block.id ? block.id : i} data={block.data} {...config[block.type]} />;
+          return <Tag key={block.id ? block.id : i} data={block.data} {...config[block.type]} tunes={block.tunes} />;
         }
       })}
     </>
