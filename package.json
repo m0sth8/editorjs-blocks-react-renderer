@@ -26,7 +26,8 @@
     "format": "prettier --write \"src/**/*.tsx\"",
     "lint": "tslint -p tsconfig.json",
     "prepublishOnly": "npm run format && npm run lint && npm t && npm run build",
-    "update:latest": "npm-check-updates -u"
+    "update:latest": "npm-check-updates -u",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
